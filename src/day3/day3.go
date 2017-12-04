@@ -5,8 +5,8 @@ import (
 	"fmt"
 )
 
-func makeSpiralMemory(in int) [][]int {
-	size := int(math.Ceil(math.Sqrt(float64(in))))
+func makeSpiralMemory(in int, spiralSum bool) [][]int {
+	size := int(math.Ceil(math.Sqrt(float64(in))))+2
 	if size%2 == 0 {
 		size++
 	}
@@ -22,9 +22,30 @@ func makeSpiralMemory(in int) [][]int {
 	locY := 0
 	direction := 0
 	//ring := 1
+	spiralLoop:
 	for i := 1; i<=in; i++ {
 		//fmt.Println(i, locX, locY, centre+locX, centre+locY)
-		memS[centre+locY][centre+locX] = i
+		if spiralSum {
+			localSum := 0
+			if i == 1 {
+				localSum = 1
+			} else {
+				for x := centre + locX - 1; x <= centre+locX+1; x++ {
+					for y := centre + locY - 1; y <= centre+locY+1; y++ {
+						//fmt.Println("Getting",x,y)
+						localSum += memS[y][x]
+					}
+				}
+			}
+			memS[centre+locY][centre+locX] = localSum
+			if in < localSum {
+				fmt.Println("Val:", localSum)
+				break spiralLoop
+			}
+		} else {
+			memS[centre+locY][centre+locX] = i
+		}
+
 		if i == in {
 			break
 		}
@@ -53,6 +74,10 @@ func makeSpiralMemory(in int) [][]int {
 				direction = 0
 			}
 		}
+		//fmt.Println("GRID")
+		//for _,r := range memS {
+		//	fmt.Println(r)
+		//}
 	}
 
 	//for _,r := range memS {
@@ -66,6 +91,6 @@ func makeSpiralMemory(in int) [][]int {
 }
 
 func main() {
-	_= makeSpiralMemory(312051)
+	_= makeSpiralMemory(312051, true)
 
 }
