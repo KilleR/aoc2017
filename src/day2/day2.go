@@ -27,6 +27,32 @@ func getCheckSum(input [][]int) int {
 	return checksum
 }
 
+func getDividerChecksum(input [][]int) int {
+	checksum := 0
+
+	for _,r := range input {
+		rowDivisor := 0
+		//rowLoop:
+		for index,i := range r {
+			for _,j := range r[index+1:] {
+				numerator := i
+				divisor := j
+				if(i<j) {
+					numerator = j
+					divisor = i
+				}
+				if numerator%divisor == 0 {
+					rowDivisor = numerator/divisor
+				}
+			}
+		}
+		fmt.Println(rowDivisor)
+		checksum += rowDivisor
+	}
+
+	return checksum
+}
+
 func main() {
 	start := time.Now()
 
@@ -49,5 +75,5 @@ func main() {
 		{55,258,363,116,319,49,212,44,303,349,327,330,316,297,313,67},
 	}
 
-	fmt.Println(getCheckSum(input), "in", time.Since(start))
+	fmt.Println(getDividerChecksum(input), "in", time.Since(start))
 }
